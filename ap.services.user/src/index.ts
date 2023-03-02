@@ -9,5 +9,5 @@ const userCtrl = require('./core/userController');
 app.use('/', userCtrl);
 
 app.listen(PORT, (): void => {
-  console.log(`Server Running here 👉 https://localhost:${PORT}`);
+  console.log(`Server Running here 👉 http://localhost:${PORT}`);
 });

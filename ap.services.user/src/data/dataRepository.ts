@@ -1,34 +1,26 @@
 import { User } from '../model/user';
 
-export class DataRepositry {
+export class DataRepository {
   private users: User[] = [];
 
+  constructor() {
+    let user: User = {
+      id: 1,
+      firstName: 'John',
+      middleName: '',
+      lastName: 'Doe',
+      userName: 'jdoe',
+      password: '1234',
+      lastModified: Date.now(),
+      isActive: true,
+    };
+
+    this.addUser(user);
+  }
+  
   addUser(user: User): User {
     this.users.push(user);
     return user;
-  }
-
-  getUser(id: number): User | null {
-    let userInDb: User | null = this.users.find((x) => x.id == id, 0) ?? null;
-    return userInDb;
-  }
-
-  getUsers(): User[] | null {
-    return this.users;
-  }
-
-  updateUser(user: User): boolean {
-    try {
-      this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;
-      this.users.find((x) => x.id == user.id, 0)!.middleName = user.middleName;
-      this.users.find((x) => x.id == user.id, 0)!.lastName = user.lastName;
-      this.users.find((x) => x.id == user.id, 0)!.userName = user.userName;
-      this.users.find((x) => x.id == user.id, 0)!.lastModified = Date.now();
-
-      return true;
-    } catch {
-      return false;
-    }
   }
 
   changePassword(
@@ -54,6 +46,29 @@ export class DataRepositry {
         (x) => x.id == id,
         0
       )!.isActive;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  getUser(id: number): User | null {
+    let userInDb: User | null = this.users.find((x) => x.id == id, 0) ?? null;
+    return userInDb;
+  }
+
+  getUsers(): User[] | null {
+    return this.users;
+  }
+
+  updateUser(user: User): boolean {
+    try {
+      this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;
+      this.users.find((x) => x.id == user.id, 0)!.middleName = user.middleName;
+      this.users.find((x) => x.id == user.id, 0)!.lastName = user.lastName;
+      this.users.find((x) => x.id == user.id, 0)!.userName = user.userName;
+      this.users.find((x) => x.id == user.id, 0)!.lastModified = Date.now();
+
       return true;
     } catch {
       return false;

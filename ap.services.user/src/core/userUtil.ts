@@ -1,22 +1,13 @@
-import { DataRepositry } from '../data/dataRepository';
+import { DataRepository } from '../data/dataRepository';
 import { User } from '../model/user';
 
-const dataRepository = new DataRepositry();
+const dataRepository = new DataRepository();
 
 export class UserUtil {
-  constructor() {
-    let user = {
-      id: 1,
-      firstName: 'John',
-      middleName: '',
-      lastName: 'Doe',
-      userName: 'jdoe',
-      password: '1234',
-      lastModified: Date.now(),
-      isActive: true,
-    };
+  private dataRepository: DataRepository;
 
-    this.addUser(user);
+  constructor(dataRepository: DataRepository) {
+    this.dataRepository = dataRepository;
   }
 
   addUser(user: User): User {
@@ -24,28 +15,28 @@ export class UserUtil {
     return user;
   }
 
-  getUser(id: number): User | null {
-    let userInDb: User | null = dataRepository.getUser(id);
-    return userInDb;
-  }
-
-  getUsers(): User[] | null {
-    return dataRepository.getUsers();
-  }
-
-  updateUser(user: User): boolean {
-    return this.updateUser(user);
-  }
-
   changePassword(
     id: number,
     oldPassword: string,
     newPassword: string
   ): boolean {
-    return dataRepository.changePassword(id, oldPassword, newPassword);
+    return this.dataRepository.changePassword(id, oldPassword, newPassword);
   }
 
   changeUserState(id: number): boolean {
-    return dataRepository.changeUserState(id);
+    return this.dataRepository.changeUserState(id);
+  }
+
+  getUser(id: number): User | null {
+    let userInDb: User | null = this.dataRepository.getUser(id);
+    return userInDb;
+  }
+
+  getUsers(): User[] | null {
+    return this.dataRepository.getUsers();
+  }
+
+  updateUser(user: User): boolean {
+    return this.dataRepository.updateUser(user);
   }
 }

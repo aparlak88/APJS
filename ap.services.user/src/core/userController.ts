@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { UserUtil } from './userUtil';
+import { DataRepository } from '../data/dataRepository';
 
 const express = require('express');
 const router = express.Router();
-const userUtil = new UserUtil();
+const dataRepository = new DataRepository();
+const userUtil = new UserUtil(dataRepository);
 
 router.get('/', (req: Request, res: Response): void => {
   res.send('Successfully started!');

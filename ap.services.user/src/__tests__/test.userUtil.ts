@@ -49,8 +49,29 @@ describe("UserUtilTests => addUser", () => {
   });
 });
 
+describe("UserUtilTests => changePassword", () => {
+  test("changePassword should return true", () => {
+    mockDataRepository.changePassword.mockImplementation(() => true);
+    let result: boolean = userUtil.changePassword(user.id, "1234", "4321");
+    expect(result).toBeTruthy();
+  });
+});
+
+describe("UserUtilTests => changeUserState", () => {
+  test("changeUserState should return true", () => {
+    mockDataRepository.changeUserState.mockImplementation(() => true);
+    let result: boolean = userUtil.changeUserState(user.id);
+    expect(result).toBeTruthy();
+  });
+  test("changeUserState should return false when id is not found", () => {
+    mockDataRepository.changeUserState.mockImplementation(() => false);
+    let result: boolean = userUtil.changeUserState(0);
+    expect(result).toBeFalsy();
+  });
+});
+
 describe("UserUtilTests => updateUser", () => {
-  test("updateUser should return user", () => {
+  test("updateUser should return true", () => {
     mockDataRepository.updateUser.mockImplementation(() => true);
     let result: boolean = userUtil.updateUser(user);
     expect(result).toBeTruthy();

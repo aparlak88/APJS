@@ -4,6 +4,7 @@ import { DataRepository } from '../data/dataRepository';
 
 const express = require('express');
 const router = express.Router();
+
 const dataRepository = new DataRepository();
 const userUtil = new UserUtil(dataRepository);
 

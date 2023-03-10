@@ -19,6 +19,8 @@ export class DataRepository {
   }
   
   addUser(user: User): User {
+    user.id = this.users[this.users.length - 1]?.id + 1;
+    user.lastModified = Date.now();
     this.users.push(user);
     return user;
   }
@@ -66,7 +68,6 @@ export class DataRepository {
       this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;
       this.users.find((x) => x.id == user.id, 0)!.middleName = user.middleName;
       this.users.find((x) => x.id == user.id, 0)!.lastName = user.lastName;
-      this.users.find((x) => x.id == user.id, 0)!.userName = user.userName;
       this.users.find((x) => x.id == user.id, 0)!.lastModified = Date.now();
 
       return true;

@@ -15,9 +15,9 @@ export class DataRepository {
       isActive: true,
     };
 
-    this.addUser(user);
+    this.users.push(user);
   }
-  
+
   addUser(user: User): User {
     user.id = this.users[this.users.length - 1]?.id + 1;
     user.lastModified = Date.now();
@@ -64,7 +64,12 @@ export class DataRepository {
   }
 
   login(userName: string, password: string): boolean {
-    if (this.users.find((x) => x.userName == userName && x.password == password && x.isActive)) return true;
+    if (
+      this.users.find(
+        (x) => x.userName == userName && x.password == password && x.isActive
+      )
+    )
+      return true;
     return false;
   }
 

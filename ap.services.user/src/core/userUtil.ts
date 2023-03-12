@@ -39,7 +39,7 @@ export class UserUtil {
     try {
       return this.dataRepository.changeUserState(id);
     } catch (error) {
-      throw new Error('Unable to change password');
+      throw new Error('Unable to change user state');
     }
   }
 
@@ -49,7 +49,7 @@ export class UserUtil {
       let userInDb: User | null = this.dataRepository.getUser(id);
       return userInDb;
     } catch (error) {
-      throw new Error('Unable to change password');
+      throw new Error('Unable to get user');
     }
   }
 
@@ -57,7 +57,7 @@ export class UserUtil {
     try {
       return this.dataRepository.getUsers();
     } catch (error) {
-      throw new Error('Unable to change password');
+      throw new Error('Unable to get users');
     }
   }
 
@@ -66,7 +66,7 @@ export class UserUtil {
     try {
       return this.dataRepository.login(userName, password);
     } catch (error) {
-      throw new Error('Unable to change password');
+      throw new Error('Unable to login');
     }
   }
 
@@ -75,7 +75,7 @@ export class UserUtil {
     try {
       return this.dataRepository.updateUser(user);
     } catch (error) {
-      throw new Error('Unable to change password');
+      throw new Error('Unable to update user');
     }
   }
 }

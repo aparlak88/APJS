@@ -1,10 +1,8 @@
 import { Application } from 'express';
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
 
-const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger.json');
-const express = require('express');
-
-
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
 const userCtrl = require('./core/userController');

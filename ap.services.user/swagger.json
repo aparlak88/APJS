@@ -46,73 +46,9 @@
           },
           "400": {
             "description": "400 response"
-          }
-        }
-      }
-    },
-    "/getUser": {
-      "get": {
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "number"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response"
           },
-          "400": {
-            "description": "400 response"
-          },
-          "404": {
-            "description": "200 response"
-          }
-        }
-      }
-    },
-    "/getUsers": {
-      "get": {
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response"
-          },
-          "404": {
-            "description": "404 response"
-          }
-        }
-      }
-    },
-    "/login": {
-      "get": {
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "body",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "body",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response"
-          },
-          "400": {
-            "description": "400 response"
-          },
-          "404": {
-            "description": "200 response"
+          "500": {
+            "description": "500 response"
           }
         }
       }
@@ -185,6 +121,79 @@
         }
       }
     },
+    "/getUser": {
+      "get": {
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "406": {
+            "description": "406 response"
+          }
+        }
+      }
+    },
+    "/getUsers": {
+      "get": {
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          },
+          "406": {
+            "description": "406 response"
+          },
+          "500": {
+            "description": "500 response"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "406": {
+            "description": "406 response"
+          },
+          "500": {
+            "description": "500 response"
+          }
+        }
+      }
+    },
     "/updateUser": {
       "post": {
         "produces": ["application/json"],
@@ -222,6 +231,9 @@
           },
           "400": {
             "description": "400 response"
+          },
+          "500": {
+            "description": "500 response"
           }
         }
       }

@@ -40,6 +40,12 @@ describe('UserUtilTests => changePassword', () => {
     let result: boolean = userUtil.changePassword(user.id, '1234', '4321');
     expect(result).toBeTruthy();
   });
+  test('changePassword should throw error when old password is empty', () => {
+    expect(() => { userUtil.changePassword(user.id, '', '4321'); }).toThrow(InvalidParameterError);
+  });  
+  test('changePassword should throw error when new password is empty', () => {
+    expect(() => { userUtil.changePassword(user.id, '1234', ''); }).toThrow(InvalidParameterError);
+  });
 });
 
 describe('UserUtilTests => changeUserState', () => {
@@ -111,5 +117,10 @@ describe('UserUtilTests => updateUser', () => {
     mockDataRepository.updateUser.mockImplementation(() => true);
     let result: boolean = userUtil.updateUser(user);
     expect(result).toBeTruthy();
+  });
+  test('updateUser should throw error when parameter is empty', () => {
+    mockDataRepository.updateUser.mockImplementation(() => false);
+    let nullUser: User;
+    expect(() => { userUtil.updateUser(nullUser); }).toThrow(InvalidParameterError);
   });
 });

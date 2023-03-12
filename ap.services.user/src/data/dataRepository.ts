@@ -63,6 +63,11 @@ export class DataRepository {
     return this.users;
   }
 
+  login(userName: string, password: string): boolean {
+    if (this.users.find((x) => x.userName == userName && x.password == password && x.isActive)) return true;
+    return false;
+  }
+
   updateUser(user: User): boolean {
     try {
       this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;

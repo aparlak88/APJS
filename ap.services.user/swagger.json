@@ -87,6 +87,36 @@
         }
       }
     },
+    "/login": {
+      "get": {
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "404": {
+            "description": "200 response"
+          }
+        }
+      }
+    },
     "/changePassword": {
       "post": {
         "produces": ["application/json"],

@@ -1,5 +1,6 @@
 import { DataRepository } from '../data/dataRepository';
 import { User } from '../model/user';
+import { InvalidParameterError } from './customErrors';
 
 const dataRepository = new DataRepository();
 
@@ -11,8 +12,13 @@ export class UserUtil {
   }
 
   addUser(user: User): User {
-    dataRepository.addUser(user);
-    return user;
+    if(!user) throw new InvalidParameterError();
+    try {
+      dataRepository.addUser(user);
+      return user;
+    } catch (error) {
+      throw new Error('Unable to update user');
+    }
   }
 
   changePassword(
@@ -20,23 +26,56 @@ export class UserUtil {
     oldPassword: string,
     newPassword: string
   ): boolean {
-    return this.dataRepository.changePassword(id, oldPassword, newPassword);
+    if(isNaN(id as any) || (!oldPassword.length || !newPassword.length)) throw new InvalidParameterError();
+    try {
+      return this.dataRepository.changePassword(id, oldPassword, newPassword);
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
   }
 
   changeUserState(id: number): boolean {
-    return this.dataRepository.changeUserState(id);
+    if(isNaN(id as any)) throw new InvalidParameterError();
+    try {
+      return this.dataRepository.changeUserState(id);
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
   }
 
   getUser(id: number): User | null {
-    let userInDb: User | null = this.dataRepository.getUser(id);
-    return userInDb;
+    if(isNaN(id as any)) throw new InvalidParameterError();
+    try {
+      let userInDb: User | null = this.dataRepository.getUser(id);
+      return userInDb;
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
   }
 
   getUsers(): User[] | null {
-    return this.dataRepository.getUsers();
+    try {
+      return this.dataRepository.getUsers();
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
+  }
+
+  login(userName: string, password: string): boolean {
+    if(!userName.length || !password.length) throw new InvalidParameterError();
+    try {
+      return this.dataRepository.login(userName, password);
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
   }
 
   updateUser(user: User): boolean {
-    return this.dataRepository.updateUser(user);
+    if(!user) throw new InvalidParameterError();
+    try {
+      return this.dataRepository.updateUser(user);
+    } catch (error) {
+      throw new Error('Unable to change password');
+    }
   }
 }

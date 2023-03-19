@@ -1,4 +1,5 @@
-import { User } from '../model/user';
+import { User } from "../model/user";
+import { User as userEntity } from "../data/entities/user";
 
 export class DataRepository {
   private users: User[] = [];
@@ -6,36 +7,46 @@ export class DataRepository {
   constructor() {
     let user: User = {
       id: 1,
-      firstName: 'John',
-      middleName: '',
-      lastName: 'Doe',
-      userName: 'jdoe',
-      password: '1234',
-      lastModified: Date.now(),
+      firstName: "John",
+      middleName: "",
+      lastName: "Doe",
+      userName: "jdoe",
+      password: "1234",
       isActive: true,
     };
 
-    this.users.push(user);
+    this.addUser(user);
   }
 
   addUser(user: User): User {
+    let entity = userEntity.create({
+      firstName: user.firstName,
+      middleName: user.middleName,
+      lastName: user.lastName,
+      userName: user.userName,
+      password: user.password,
+      isActive: user.isActive
+    });
     user.id = this.users[this.users.length - 1]?.id + 1;
-    user.lastModified = Date.now();
     this.users.push(user);
     return user;
   }
 
-  changePassword(
+  async changePassword(
     id: number,
     oldPassword: string,
     newPassword: string
-  ): boolean {
+  ): Promise<boolean> {
     try {
-      let userInDb: User | null = this.users.find((x) => x.id == id, 0) ?? null;
-      if (!userInDb) return false;
-      if (userInDb.password != oldPassword) return false;
+      let entity = await userEntity.findOne({
+        where: {
+          id: id
+        }
+    })
+      if (!entity) return false;
+      if (entity.password != oldPassword) return false;
 
-      userInDb.password = newPassword;
+      entity.password = newPassword;
       return true;
     } catch {
       return false;
@@ -78,7 +89,6 @@ export class DataRepository {
       this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;
       this.users.find((x) => x.id == user.id, 0)!.middleName = user.middleName;
       this.users.find((x) => x.id == user.id, 0)!.lastName = user.lastName;
-      this.users.find((x) => x.id == user.id, 0)!.lastModified = Date.now();
 
       return true;
     } catch {

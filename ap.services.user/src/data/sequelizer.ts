@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { User } from "../data/entities/user";
+import { UserEntity } from "./entities/userEntity";
 
 const sequelize = new Sequelize(
   "freedb_ap.userdb",
@@ -22,6 +22,6 @@ export class Sequelizer {
   }
 
   syncTables() {
-    User.sync();
+    UserEntity.sync();
   }
 }

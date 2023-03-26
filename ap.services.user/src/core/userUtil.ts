@@ -1,9 +1,8 @@
 import { DataRepository } from "../data/dataRepository";
 import { Sequelizer } from "../data/sequelizer";
 import { User } from "../model/user";
-import { InvalidParameterError } from "./customErrors";
+import { InvalidParameterError, UtilityOperationError } from "./customErrors";
 
-const dataRepository = new DataRepository();
 
 export class UserUtil {
   private dataRepository: DataRepository;
@@ -12,63 +11,67 @@ export class UserUtil {
     this.dataRepository = dataRepository;
   }
 
-  addUser(user: User): User {
+  async addUser(user: User): Promise<User> {
     if (!user) throw new InvalidParameterError();
     try {
-      dataRepository.addUser(user);
+      this.dataRepository.addUser(user);
       return user;
     } catch (error) {
-      throw new Error("Unable to update user");
+      throw new UtilityOperationError();
     }
   }
 
-  changePassword(
+  async changePassword(
     id: number,
     oldPassword: string,
     newPassword: string
-  ): boolean {
+  ): Promise<boolean> {
     if (isNaN(id as any) || !oldPassword.length || !newPassword.length)
       throw new InvalidParameterError();
     try {
-      return this.dataRepository.changePassword(id, oldPassword, newPassword);
+      return await this.dataRepository
+        .changePassword(id, oldPassword, newPassword);
     } catch (error) {
-      throw new Error("Unable to change password");
+      throw new UtilityOperationError();
     }
   }
 
-  changeUserState(id: number): boolean {
+  async changeUserState(id: number): Promise<boolean> {
     if (isNaN(id as any)) throw new InvalidParameterError();
     try {
       return this.dataRepository.changeUserState(id);
     } catch (error) {
-      throw new Error("Unable to change user state");
+      throw new UtilityOperationError();
     }
   }
 
-  getUser(id: number): User | null {
+  async getUser(id: number): Promise<User | null> {
     if (isNaN(id as any)) throw new InvalidParameterError();
     try {
-      let userInDb: User | null = this.dataRepository.getUser(id);
-      return userInDb;
+      return await this.dataRepository.getUser(id);
     } catch (error) {
-      throw new Error("Unable to get user");
+      throw new UtilityOperationError();
     }
   }
 
-  getUsers(): User[] | null {
+  async getUsers(): Promise<User[] | null> {
     try {
-      return this.dataRepository.getUsers();
+      let users: User[] | null = [];
+      this.dataRepository.getUsers().then((r) => {
+        users = r;
+      });
+      return users;
     } catch (error) {
-      throw new Error("Unable to get users");
+      throw new UtilityOperationError();
     }
   }
 
-  login(userName: string, password: string): boolean {
+  async login(userName: string, password: string): Promise<boolean> {
     if (!userName.length || !password.length) throw new InvalidParameterError();
     try {
-      return this.dataRepository.login(userName, password);
+      return await this.dataRepository.login(userName, password);
     } catch (error) {
-      throw new Error("Unable to login");
+      throw new UtilityOperationError();
     }
   }
 
@@ -81,12 +84,12 @@ export class UserUtil {
     return result;
   }
 
-  updateUser(user: User): boolean {
+  async updateUser(user: User): Promise<boolean> {
     if (!user) throw new InvalidParameterError();
     try {
-      return this.dataRepository.updateUser(user);
+      return await this.dataRepository.updateUser(user);
     } catch (error) {
-      throw new Error("Unable to update user");
+      throw new UtilityOperationError();
     }
   }
 }

@@ -76,13 +76,13 @@ router.get(
   }
 );
 
-router.get("/getUser", checkAuth, (req: Request, res: Response): void => {
+router.get("/getUser", checkAuth, async (req: Request, res: Response): Promise<void> => {
   if (isNaN(req.query.id as any)) {
     res.status(400);
     res.send("Invalid paramters");
   }
   try {
-    let result: User | null = userUtil.getUser(req.query.id as any);
+    let result: User | null = await userUtil.getUser(req.query.id as any);
     if (result === null) {
       res.status(406);
       res.send("No result found");
@@ -96,9 +96,9 @@ router.get("/getUser", checkAuth, (req: Request, res: Response): void => {
   }
 });
 
-router.get("/getUsers", checkAuth, (req: Request, res: Response): void => {
+router.get("/getUsers", checkAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    let users = userUtil.getUsers();
+    let users = await userUtil.getUsers();
     if (users?.length) {
       res.status(200);
       res.send(users);
@@ -112,13 +112,13 @@ router.get("/getUsers", checkAuth, (req: Request, res: Response): void => {
   }
 });
 
-router.post("/login", (req: Request, res: Response): void => {
+router.post("/login", async (req: Request, res: Response): Promise<void> => {
   if (!req.body.userName?.length || !req.body.password?.length) {
     res.status(400);
     res.send("Invalid paramters");
   }
   try {
-    let result = userUtil.login(req.body.userName, req.body.password);
+    let result = await userUtil.login(req.body.userName, req.body.password);
     if (result) {
       const token = jwt.sign(
         {
@@ -141,14 +141,14 @@ router.post("/login", (req: Request, res: Response): void => {
   }
 });
 
-router.post("/updateUser", checkAuth, (req: Request, res: Response): void => {
+router.post("/updateUser", checkAuth, async (req: Request, res: Response): Promise<void> => {
   if (!req.body.user) {
     res.status(400);
     res.send("Invalid paramters");
   }
   try {
     let user = req.body.user;
-    let updatedUser = userUtil.updateUser(user);
+    let updatedUser = await userUtil.updateUser(user);
     res.status(200);
     res.send(updatedUser);
   } catch (error) {

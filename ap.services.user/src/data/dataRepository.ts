@@ -1,5 +1,10 @@
+import {
+  EntityNotFoundError,
+  EntityOperationError,
+} from "../core/customErrors";
 import { User } from "../model/user";
-import { User as userEntity } from "../data/entities/user";
+import { UserEntity, UserEntity as userEntity } from "./entities/userEntity";
+import { Op } from "sequelize";
 
 export class DataRepository {
   private users: User[] = [];
@@ -15,21 +20,28 @@ export class DataRepository {
       isActive: true,
     };
 
-    this.addUser(user);
+    // this.addUser(user);
   }
 
-  addUser(user: User): User {
-    let entity = userEntity.create({
-      firstName: user.firstName,
-      middleName: user.middleName,
-      lastName: user.lastName,
-      userName: user.userName,
-      password: user.password,
-      isActive: user.isActive
-    });
-    user.id = this.users[this.users.length - 1]?.id + 1;
-    this.users.push(user);
-    return user;
+  async addUser(user: User): Promise<UserEntity | null> {
+    try {
+      let entity = await userEntity.findOne({
+        where: {
+          userName: user.userName,
+        },
+      });
+      if (entity) throw new EntityOperationError();
+      return userEntity.create({
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        userName: user.userName,
+        password: user.password,
+        isActive: user.isActive,
+      });
+    } catch {
+      throw new EntityOperationError();
+    }
   }
 
   async changePassword(
@@ -40,59 +52,83 @@ export class DataRepository {
     try {
       let entity = await userEntity.findOne({
         where: {
-          id: id
-        }
-    })
-      if (!entity) return false;
+          id: id,
+        },
+      });
+      if (!entity) throw new EntityNotFoundError();
       if (entity.password != oldPassword) return false;
 
       entity.password = newPassword;
       return true;
     } catch {
-      return false;
+      throw new EntityOperationError();
     }
   }
 
-  changeUserState(id: number): boolean {
+  async changeUserState(id: number): Promise<boolean> {
     try {
-      this.users.find((x) => x.id == id, 0)!.isActive = !this.users.find(
-        (x) => x.id == id,
-        0
-      )!.isActive;
+      let entity = await userEntity.findOne({
+        where: {
+          id: id,
+        },
+      });
+      if (!entity) throw new EntityNotFoundError();
+      entity.isActive = !entity.isActive;
       return true;
     } catch {
-      return false;
+      throw new EntityOperationError();
     }
   }
 
-  getUser(id: number): User | null {
-    let userInDb: User | null = this.users.find((x) => x.id == id, 0) ?? null;
-    return userInDb;
+  async getUser(id: number): Promise<User | null> {
+    return await userEntity.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  getUsers(): User[] | null {
-    return this.users;
+  async getUsers(): Promise<User[] | null> {
+    return await userEntity.findAll();
   }
 
-  login(userName: string, password: string): boolean {
+  async login(userName: string, password: string): Promise<boolean> {
     if (
-      this.users.find(
-        (x) => x.userName == userName && x.password == password && x.isActive
-      )
-    )
+      await userEntity.findOne({
+        where: {
+          [Op.and]: [{ userName: userName }, { password: password }],
+        },
+      })
+    ) {
       return true;
-    return false;
+    } else {
+      return false;
+    }
   }
 
-  updateUser(user: User): boolean {
+  async updateUser(user: User): Promise<boolean> {
     try {
-      this.users.find((x) => x.id == user.id, 0)!.firstName = user.firstName;
-      this.users.find((x) => x.id == user.id, 0)!.middleName = user.middleName;
-      this.users.find((x) => x.id == user.id, 0)!.lastName = user.lastName;
-
+      let entity = await userEntity.findOne({
+        where: {
+          id: user.id,
+        },
+      });
+      if (!entity) throw new EntityNotFoundError();
+      await userEntity.update(
+        {
+          firstName: user.firstName,
+          middleName: user.middleName,
+          lastName: user.lastName,
+        },
+        {
+          where: {
+            id: user.id,
+          },
+        }
+      );
       return true;
     } catch {
-      return false;
+      throw new EntityOperationError();
     }
   }
 }

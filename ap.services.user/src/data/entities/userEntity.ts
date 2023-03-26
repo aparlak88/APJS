@@ -10,9 +10,17 @@ const sequelize = new Sequelize(
   }
 );
 
-export class User extends Model {}
+export class UserEntity extends Model {
+  declare id: number;
+  declare firstName: string;
+  declare middleName: string;
+  declare lastName: string;
+  declare userName: string;
+  declare password: string;
+  declare isActive: boolean;
+}
 
-User.init(
+UserEntity.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -30,8 +38,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",
-      validate: {
-      },
+      validate: {},
     },
     lastName: {
       type: DataTypes.STRING,
@@ -60,5 +67,8 @@ User.init(
       allowNull: false,
     },
   },
-  { sequelize }
+  {
+    tableName: "Users",
+    sequelize,
+  }
 );

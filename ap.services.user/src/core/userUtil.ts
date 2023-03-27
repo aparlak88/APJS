@@ -4,7 +4,6 @@ import { Sequelizer } from "../data/sequelizer";
 import { User } from "../model/user";
 import { InvalidParameterError, UtilityOperationError } from "./customErrors";
 
-
 export class UserUtil {
   private dataRepository: DataRepository;
 
@@ -30,8 +29,11 @@ export class UserUtil {
     if (isNaN(id as any) || !oldPassword.length || !newPassword.length)
       throw new InvalidParameterError();
     try {
-      return await this.dataRepository
-        .changePassword(id, oldPassword, newPassword);
+      return await this.dataRepository.changePassword(
+        id,
+        oldPassword,
+        newPassword
+      );
     } catch (error) {
       throw new UtilityOperationError();
     }
@@ -71,7 +73,7 @@ export class UserUtil {
     try {
       let userEntities: UserEntity[] = await this.dataRepository.getUsers();
       let users: User[] = [];
-      userEntities.forEach(itm => {
+      userEntities.forEach((itm) => {
         let user: User = new User();
         user.id = itm.id;
         user.firstName = itm.firstName;
@@ -83,15 +85,6 @@ export class UserUtil {
         users.push(user);
       });
       return users;
-    } catch (error) {
-      throw new UtilityOperationError();
-    }
-  }
-
-  async login(userName: string, password: string): Promise<boolean> {
-    if (!userName.length || !password.length) throw new InvalidParameterError();
-    try {
-      return await this.dataRepository.login(userName, password);
     } catch (error) {
       throw new UtilityOperationError();
     }

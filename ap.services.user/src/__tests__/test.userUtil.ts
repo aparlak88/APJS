@@ -113,28 +113,6 @@ describe("UserUtilTests => getUser", () => {
   });
 });
 
-describe("UserUtilTests => login", () => {
-  test("login should return true", async () => {
-    mockDataRepository.login.mockImplementation(() => Promise.resolve(true));
-    let result: boolean = await userUtil.login(user.userName, user.password);
-    expect(result).toBeTruthy();
-  });
-  test("login should throw error when userName is empty", () => {
-    expect(async () => {
-      await userUtil.login("", user.password);
-    })
-    .rejects
-    .toThrow(InvalidParameterError);
-  });
-  test("login should throw error when password is empty", () => {
-    expect(async () => {
-      await userUtil.login(user.userName, "");
-    })
-    .rejects
-    .toThrow(InvalidParameterError);
-  });
-});
-
 describe("UserUtilTests => getUsers", () => {
   test("getUsers should return users", async () => {
     mockDataRepository.getUsers.mockImplementation(() => Promise.resolve(userEntities));

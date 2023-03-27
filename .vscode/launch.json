@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/ap.services.user/src/index.ts",
+            "program": "${workspaceFolder}/ap.services.user/src/app.ts",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

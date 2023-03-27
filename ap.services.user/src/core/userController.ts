@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { UserUtil } from "./userUtil";
 import { DataRepository } from "../data/dataRepository";
 import { User } from "../model/user";
-import jwt from "jsonwebtoken";
 import express from "express";
-
-const checkAuth = require("../core/checkauth");
 
 const router = express.Router();
 const dataRepository = new DataRepository();
@@ -15,7 +12,7 @@ router.get("/", (req: Request, res: Response): void => {
   res.send("Successfully started!");
 });
 
-router.post("/addUser", checkAuth, (req: Request, res: Response): void => {
+router.post("/addUser", (req: Request, res: Response): void => {
   if (!req.body.user) {
     res.status(400);
     res.send("Invalid paramters");
@@ -31,52 +28,44 @@ router.post("/addUser", checkAuth, (req: Request, res: Response): void => {
   }
 });
 
-router.post(
-  "/changePassword",
-  checkAuth,
-  (req: Request, res: Response): void => {
-    if (isNaN(req.body.id as any)) {
-      res.status(400);
-      res.send("Invalid paramters");
-    }
-    if (!req.body.oldPassword?.length || !req.body.newPassword?.length) {
-      res.status(400);
-      res.send("Invalid paramters");
-    }
-    try {
-      userUtil.changePassword(
-        req.body.id,
-        req.body.oldPassword,
-        req.body.newPassword
-      );
-      res.status(200);
-      res.send("Success");
-    } catch (error) {
-      res.status(500);
-      res.send(error);
-    }
+router.post("/changePassword", (req: Request, res: Response): void => {
+  if (isNaN(req.body.id as any)) {
+    res.status(400);
+    res.send("Invalid paramters");
   }
-);
-
-router.get(
-  "/changeUserState",
-  checkAuth,
-  (req: Request, res: Response): void => {
-    if (isNaN(req.query.id as any)) {
-      res.status(400);
-      res.send("Invalid paramters");
-    }
-    try {
-      userUtil.changeUserState(req.query.id as any);
-      res.status(200);
-      res.send("Success");
-    } catch {
-      res.sendStatus(500);
-    }
+  if (!req.body.oldPassword?.length || !req.body.newPassword?.length) {
+    res.status(400);
+    res.send("Invalid paramters");
   }
-);
+  try {
+    userUtil.changePassword(
+      req.body.id,
+      req.body.oldPassword,
+      req.body.newPassword
+    );
+    res.status(200);
+    res.send("Success");
+  } catch (error) {
+    res.status(500);
+    res.send(error);
+  }
+});
 
-router.get("/getUser", checkAuth, async (req: Request, res: Response): Promise<void> => {
+router.get("/changeUserState", (req: Request, res: Response): void => {
+  if (isNaN(req.query.id as any)) {
+    res.status(400);
+    res.send("Invalid paramters");
+  }
+  try {
+    userUtil.changeUserState(req.query.id as any);
+    res.status(200);
+    res.send("Success");
+  } catch {
+    res.sendStatus(500);
+  }
+});
+
+router.get("/getUser", async (req: Request, res: Response): Promise<void> => {
   if (isNaN(req.query.id as any)) {
     res.status(400);
     res.send("Invalid paramters");
@@ -96,7 +85,7 @@ router.get("/getUser", checkAuth, async (req: Request, res: Response): Promise<v
   }
 });
 
-router.get("/getUsers", checkAuth, async (req: Request, res: Response): Promise<void> => {
+router.get("/getUsers", async (req: Request, res: Response): Promise<void> => {
   try {
     let users = await userUtil.getUsers();
     if (users?.length) {
@@ -112,49 +101,23 @@ router.get("/getUsers", checkAuth, async (req: Request, res: Response): Promise<
   }
 });
 
-router.post("/login", async (req: Request, res: Response): Promise<void> => {
-  if (!req.body.userName?.length || !req.body.password?.length) {
-    res.status(400);
-    res.send("Invalid paramters");
-  }
-  try {
-    let result = await userUtil.login(req.body.userName, req.body.password);
-    if (result) {
-      const token = jwt.sign(
-        {
-          muuid: req.body.userName,
-          memail: req.body.userName,
-        },
-        "secret_key",
-        {
-          expiresIn: "2h",
-        }
-      );
-      res.status(200);
-      res.send({ message: "success", token });
-    } else {
-      res.sendStatus(406);
+router.post(
+  "/updateUser",
+  async (req: Request, res: Response): Promise<void> => {
+    if (!req.body.user) {
+      res.status(400);
+      res.send("Invalid paramters");
     }
-  } catch (error) {
-    res.status(500);
-    res.send(error);
+    try {
+      let user = req.body.user;
+      let updatedUser = await userUtil.updateUser(user);
+      res.status(200);
+      res.send(updatedUser);
+    } catch (error) {
+      res.status(500);
+      res.send(error);
+    }
   }
-});
-
-router.post("/updateUser", checkAuth, async (req: Request, res: Response): Promise<void> => {
-  if (!req.body.user) {
-    res.status(400);
-    res.send("Invalid paramters");
-  }
-  try {
-    let user = req.body.user;
-    let updatedUser = await userUtil.updateUser(user);
-    res.status(200);
-    res.send(updatedUser);
-  } catch (error) {
-    res.status(500);
-    res.send(error);
-  }
-});
+);
 
 module.exports = router;

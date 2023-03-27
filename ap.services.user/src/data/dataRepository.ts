@@ -80,7 +80,7 @@ export class DataRepository {
     }
   }
 
-  async getUser(id: number): Promise<User | null> {
+  async getUser(id: number): Promise<UserEntity | null> {
     return await userEntity.findOne({
       where: {
         id: id,
@@ -88,7 +88,7 @@ export class DataRepository {
     });
   }
 
-  async getUsers(): Promise<User[] | null> {
+  async getUsers(): Promise<UserEntity[]> {
     return await userEntity.findAll();
   }
 

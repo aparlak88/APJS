@@ -27,6 +27,7 @@ let userEntity: UserEntity = new UserEntity({
   password: user.password,
   isActive: user.isActive
 });
+let userEntities: UserEntity[] = [userEntity];
 const userUtil = new UserUtil(mockDataRepository);
 
 describe("UserUtilTests => addUser", () => {
@@ -136,11 +137,11 @@ describe("UserUtilTests => login", () => {
 
 describe("UserUtilTests => getUsers", () => {
   test("getUsers should return users", async () => {
-    mockDataRepository.getUsers.mockImplementation(() => Promise.resolve(users));
-
-    let result: User[] | null = await userUtil.getUsers();
+    mockDataRepository.getUsers.mockImplementation(() => Promise.resolve(userEntities));
+    let result: User[] = await userUtil.getUsers();
     expect(result).not.toBeNull();
     expect(result).not.toHaveLength(0);
+    expect(result).toEqual(users);
   });
   test("getUsers should return empty array", async () => {
     mockDataRepository.getUsers.mockImplementation(() => Promise.resolve([]));
@@ -149,9 +150,9 @@ describe("UserUtilTests => getUsers", () => {
     expect(result).toHaveLength(0);
   });
   test("getUsers should return null", async () => {
-    mockDataRepository.getUsers.mockImplementation(() => Promise.resolve(null));
+    mockDataRepository.getUsers.mockImplementation(() => Promise.resolve([]));
     let result: User[] | null = await userUtil.getUsers();
-    expect(result).toBeNull();
+    expect(result).toEqual([]);
   });
 });
 

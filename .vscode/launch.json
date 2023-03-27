@@ -15,6 +15,29 @@
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
-        }
+        },
+        {
+            "name": "User service Jest debug",
+            "type": "pwa-node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}/ap.services.user/node_modules/.bin/jest",
+            "args": [
+                "${fileBasenameNoExtension}",
+                "--runInBand",
+                "--watch",
+                "--coverage=false",
+                "--no-cache",
+                "--config",
+                "${workspaceRoot}/ap.services.user/jest.config.js"
+            ],
+            "cwd": "${workspaceRoot}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "sourceMaps": true,
+            "windows": {
+                "program": "${workspaceFolder}/ap.services.user/node_modules/jest/bin/jest"
+            }
+        },
+
     ]
 }

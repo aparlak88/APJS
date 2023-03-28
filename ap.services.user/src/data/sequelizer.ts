@@ -1,13 +1,14 @@
 import { Sequelize } from "sequelize";
 import { UserEntity } from "./entities/userEntity";
+var config = require("../../config.json");
 
 const sequelize = new Sequelize(
-  "freedb_ap.userdb",
-  "freedb_ap.user",
-  "5KQYWBD6qeP?hTq",
+  config.dbServer.dbName,
+  config.dbServer.username,
+  config.dbServer.password,
   {
-    host: "sql.freedb.tech",
-    dialect: "mysql",
+    host: config.dbServer.host,
+    dialect: config.dbServer.dialect,
   }
 );
 

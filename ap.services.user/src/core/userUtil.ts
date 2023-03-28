@@ -3,6 +3,10 @@ import { UserEntity } from "../data/entities/userEntity";
 import { Sequelizer } from "../data/sequelizer";
 import { User } from "../model/user";
 import { InvalidParameterError, UtilityOperationError } from "./customErrors";
+import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from 'uuid';
+
+var config = require("../../config.json");
 
 export class UserUtil {
   private dataRepository: DataRepository;
@@ -85,6 +89,28 @@ export class UserUtil {
         users.push(user);
       });
       return users;
+    } catch (error) {
+      throw new UtilityOperationError();
+    }
+  }
+
+  async login(userName: string, password: string): Promise<string> {
+    try {
+      if (!userName || !password) throw new InvalidParameterError();
+      let entity = await this.dataRepository.login(userName, password);
+      if (!entity) throw new UtilityOperationError();
+
+      return jwt.sign(
+        {
+          uuid: uuidv4(),
+          username: entity.userName,
+          userid: entity.id,
+        },
+        config.jwtSecretKey,
+        {
+          expiresIn: "30m",
+        }
+      );
     } catch (error) {
       throw new UtilityOperationError();
     }

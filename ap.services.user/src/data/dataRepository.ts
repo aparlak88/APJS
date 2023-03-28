@@ -92,6 +92,17 @@ export class DataRepository {
     return await userEntity.findAll();
   }
 
+  async login(userName: string, password: string): Promise<userEntity> {
+    let entity = await userEntity.findOne({
+      where: {
+        userName: userName,
+        password: password
+      },
+    })
+    if (!entity) throw new EntityNotFoundError();
+    return entity;
+  }
+
   async updateUser(user: User): Promise<boolean> {
     try {
       let entity = await userEntity.findOne({

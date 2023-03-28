@@ -1,0 +1,10 @@
+{
+  "dbServer": {
+    "host": "ql.freedb.tech",
+    "username": "freedb_ap.user",
+    "password": "5KQYWBD6qeP?hTq",
+    "dbName": "freedb_ap.userdb",
+    "dialect": "mysql"
+  },
+  "jwtSecretKey": "91249681-5226-4a78-84ee-acfe0d010719"
+}

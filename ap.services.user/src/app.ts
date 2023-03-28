@@ -13,5 +13,5 @@ app.use(express.json());
 app.use("/", userCtrl);
 
 app.listen(PORT, (): void => {
-  console.log(`Server Running here 👉 http://localhost:${PORT}/doc`);
+  console.log(`Server Running here 👉 http://localhost:${PORT}/`);
 });

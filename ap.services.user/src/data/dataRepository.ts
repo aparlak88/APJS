@@ -4,7 +4,6 @@ import {
 } from "../core/customErrors";
 import { User } from "../model/user";
 import { UserEntity, UserEntity as userEntity } from "./entities/userEntity";
-import { Op } from "sequelize";
 
 export class DataRepository {
   private users: User[] = [];

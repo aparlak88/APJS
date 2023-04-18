@@ -4,8 +4,9 @@ admin:
   port: 4100
   host: localhost
 apiEndpoints:
-  api:
-    host: localhost
+  userapi:
+    host: '*'
+    paths: /user/*
 serviceEndpoints:
   userservice:
     url: 'http://localhost:3000'
@@ -21,10 +22,12 @@ policies:
 pipelines:
   default:
     apiEndpoints:
-      - api
+      - userapi
     policies:
     # Uncomment `key-auth:` when instructed to in the Getting Started guide.
     # - key-auth:
+      - jwt:
+        action:
       - proxy:
           - action:
               serviceEndpoint: userservice 

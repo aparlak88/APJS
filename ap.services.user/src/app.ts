@@ -10,8 +10,8 @@ const sequelizer = new Sequelizer();
 sequelizer.syncTables();
 
 app.use(express.json());
-app.use("/", userCtrl);
+app.use("/user/", userCtrl);
 
 app.listen(PORT, (): void => {
-  console.log(`Server Running here 👉 http://localhost:${PORT}/`);
+  console.log(`Server Running here 👉 http://localhost:${PORT}/user`);
 });

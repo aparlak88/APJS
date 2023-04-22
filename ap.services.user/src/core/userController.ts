@@ -4,7 +4,7 @@ import { DataRepository } from "../data/dataRepository";
 import { User } from "../model/user";
 import express from "express";
 
-const checkAuth = require("./checkAuth.js");
+import checkAuth from "./checkAuth";
 const router = express.Router();
 const dataRepository = new DataRepository();
 const userUtil = new UserUtil(dataRepository);

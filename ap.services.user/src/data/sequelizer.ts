@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import { UserEntity } from "./entities/userEntity";
-var config = require("../../config.json");
+var config = require("../config.json");
 
 const sequelize = new Sequelize(
   config.dbServer.dbName,

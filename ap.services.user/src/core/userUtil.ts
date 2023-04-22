@@ -6,7 +6,7 @@ import { InvalidParameterError, UtilityOperationError } from "./customErrors";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from 'uuid';
 
-var config = require("../../config.json");
+var config = require("../config.json");
 
 export class UserUtil {
   private dataRepository: DataRepository;

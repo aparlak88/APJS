@@ -14,28 +14,32 @@ router.get("/", (req: Request, res: Response): void => {
   res.send("Successfully started!");
 });
 
-router.post("/addUser", checkAuth, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  await checkRole(req, res);
-  if (!req.body.user) {
-    res.status(400);
-    res.send("Invalid paramters");
+router.post(
+  "/addUser",
+  checkAuth,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await checkRole(req, res, next);
+    if (!req.body.user) {
+      res.status(400);
+      res.send("Invalid paramters");
+    }
+    try {
+      let user = req.body.user;
+      let addedUser = userUtil.addUser(user);
+      res.status(200);
+      res.send(addedUser);
+    } catch (error) {
+      res.status(500);
+      res.send(error);
+    }
   }
-  try {
-    let user = req.body.user;
-    let addedUser = userUtil.addUser(user);
-    res.status(200);
-    res.send(addedUser);
-  } catch (error) {
-    res.status(500);
-    res.send(error);
-  }
-});
+);
 
 router.post(
   "/changePassword",
   checkAuth,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    await checkRole(req, res);
+    await checkRole(req, res, next);
     if (isNaN(req.body.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -63,7 +67,7 @@ router.get(
   "/changeUserState",
   checkAuth,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    await checkRole(req, res);
+    await checkRole(req, res, next);
     if (isNaN(req.query.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -82,7 +86,7 @@ router.get(
   "/getUser",
   checkAuth,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    await checkRole(req, res);
+    await checkRole(req, res, next);
     if (isNaN(req.query.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -106,47 +110,46 @@ router.get(
 router.get(
   "/getUsers",
   checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
-    await checkRole(req, res);
-    try {
-      let users = await userUtil.getUsers();
-      if (users?.length) {
-        res.status(200);
-        res.send(users);
-      } else {
-        res.status(406);
-        res.send("No result found");
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    checkRole(req, res, next).then(async (r) => {
+      if (r != undefined) return;
+      try {
+        let users = await userUtil.getUsers();
+        if (users?.length) {
+          res.status(200);
+          res.send(users);
+        } else {
+          res.status(406);
+          res.send("No result found");
+        }
+      } catch (error) {
+        res.status(500);
+        res.send(error);
       }
-    } catch (error) {
-      res.status(500);
-      res.send(error);
-    }
+    });
   }
 );
 
-router.post(
-  "/login",
-  async (req: Request, res: Response): Promise<void> => {
-    if (!req.body.userName || !req.body.password) {
-      res.status(400);
-      res.send("Invalid paramters");
-    }
-    try {
-      let token = await userUtil.login(req.body.userName, req.body.password);
-      res.status(200);
-      res.send(token);
-    } catch (error) {
-      res.status(500);
-      res.send(error);
-    }
+router.post("/login", async (req: Request, res: Response): Promise<void> => {
+  if (!req.body.userName || !req.body.password) {
+    res.status(400);
+    res.send("Invalid paramters");
   }
-);
+  try {
+    let token = await userUtil.login(req.body.userName, req.body.password);
+    res.status(200);
+    res.send(token);
+  } catch (error) {
+    res.status(500);
+    res.send(error);
+  }
+});
 
 router.post(
   "/updateUser",
   checkAuth,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    await checkRole(req, res);
+    await checkRole(req, res, next);
     if (!req.body.user) {
       res.status(400);
       res.send("Invalid paramters");

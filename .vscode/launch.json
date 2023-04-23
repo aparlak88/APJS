@@ -1,43 +1,49 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/ap.services.user/src/app.ts",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
-        },
-        {
-            "name": "User service Jest debug",
-            "type": "pwa-node",
-            "request": "launch",
-            "runtimeExecutable": "${workspaceRoot}/ap.services.user/node_modules/.bin/jest",
-            "args": [
-                "${fileBasenameNoExtension}",
-                "--runInBand",
-                "--watch",
-                "--coverage=false",
-                "--no-cache",
-                "--config",
-                "${workspaceRoot}/ap.services.user/jest.config.js"
-            ],
-            "cwd": "${workspaceRoot}",
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "sourceMaps": true,
-            "windows": {
-                "program": "${workspaceFolder}/ap.services.user/node_modules/jest/bin/jest"
-            }
-        },
-
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/ap.services.user/src/app.ts",
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "name": "User service ts-node",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+      "args": ["src/app.ts"],
+      "cwd": "${workspaceRoot}/ap.services.user",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
+    },
+    {
+      "name": "User service Jest debug",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/ap.services.user/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--runInBand",
+        "--watch",
+        "--coverage=false",
+        "--no-cache",
+        "--config",
+        "${workspaceRoot}/ap.services.user/jest.config.js"
+      ],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true,
+      "windows": {
+        "program": "${workspaceFolder}/ap.services.user/node_modules/jest/bin/jest"
+      }
+    }
+  ]
 }

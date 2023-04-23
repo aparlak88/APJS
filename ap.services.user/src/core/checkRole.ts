@@ -7,7 +7,7 @@ const userUtil = new UserUtil(dataRepository);
 
 var config = require("../config.json");
 
-export default async (req: any, res: any) => {
+export default async (req: any, res: any, next: any) => {
   try {
     /*JWT is send with request header! 
         Format of it: Authorization : Bearer <token>
@@ -20,7 +20,8 @@ export default async (req: any, res: any) => {
       switch (req.url) {
         case "/getUsers":
           switch (user.role) {
-            case "System Administrato":
+            case "System Administrator":
+              next();
               break;
             default:
               return res.status(401).send({
@@ -28,10 +29,6 @@ export default async (req: any, res: any) => {
               });
           }
           break;
-        default:
-          return res.status(401).send({
-            message: "Authz failed.",
-          });
       }
     } else {
       return res.status(401).send({

@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserUtil } from "./userUtil";
 import { DataRepository } from "../data/dataRepository";
 import { User } from "../model/user";
 import express from "express";
 
 import checkAuth from "./checkAuth";
+import checkRole from "./checkRole";
 const router = express.Router();
 const dataRepository = new DataRepository();
 const userUtil = new UserUtil(dataRepository);
@@ -13,7 +14,8 @@ router.get("/", (req: Request, res: Response): void => {
   res.send("Successfully started!");
 });
 
-router.post("/addUser", checkAuth, (req: Request, res: Response): void => {
+router.post("/addUser", checkAuth, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  await checkRole(req, res);
   if (!req.body.user) {
     res.status(400);
     res.send("Invalid paramters");
@@ -32,7 +34,8 @@ router.post("/addUser", checkAuth, (req: Request, res: Response): void => {
 router.post(
   "/changePassword",
   checkAuth,
-  (req: Request, res: Response): void => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await checkRole(req, res);
     if (isNaN(req.body.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -59,7 +62,8 @@ router.post(
 router.get(
   "/changeUserState",
   checkAuth,
-  (req: Request, res: Response): void => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await checkRole(req, res);
     if (isNaN(req.query.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -77,7 +81,8 @@ router.get(
 router.get(
   "/getUser",
   checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await checkRole(req, res);
     if (isNaN(req.query.id as any)) {
       res.status(400);
       res.send("Invalid paramters");
@@ -102,6 +107,7 @@ router.get(
   "/getUsers",
   checkAuth,
   async (req: Request, res: Response): Promise<void> => {
+    await checkRole(req, res);
     try {
       let users = await userUtil.getUsers();
       if (users?.length) {
@@ -139,7 +145,8 @@ router.post(
 router.post(
   "/updateUser",
   checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await checkRole(req, res);
     if (!req.body.user) {
       res.status(400);
       res.send("Invalid paramters");

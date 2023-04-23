@@ -6,4 +6,5 @@ export class User extends Base {
   public lastName: string = '';
   public userName: string = '';
   public password: string = '';
+  public role: string = '';
 }

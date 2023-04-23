@@ -16,6 +16,7 @@ export class DataRepository {
       lastName: "Doe",
       userName: "jdoe",
       password: "1234",
+      role: "System Administrator",
       isActive: true,
     };
 
@@ -36,6 +37,7 @@ export class DataRepository {
         lastName: user.lastName,
         userName: user.userName,
         password: user.password,
+        role: user.role,
         isActive: user.isActive,
       });
     } catch {
@@ -115,6 +117,7 @@ export class DataRepository {
           firstName: user.firstName,
           middleName: user.middleName,
           lastName: user.lastName,
+          role: user.role,
         },
         {
           where: {

@@ -17,6 +17,7 @@ export class UserEntity extends Model {
   declare lastName: string;
   declare userName: string;
   declare password: string;
+  declare role: string;
   declare isActive: boolean;
 }
 
@@ -61,6 +62,10 @@ UserEntity.init(
       validate: {
         min: 4,
       },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     isActive: {
       type: DataTypes.BOOLEAN,

@@ -64,6 +64,7 @@ export class UserUtil {
         user.lastName = entity.lastName;
         user.userName = entity.userName;
         user.password = entity.password;
+        user.role = entity.role;
         user.isActive = entity.isActive;
         return user;
       }
@@ -85,6 +86,7 @@ export class UserUtil {
         user.lastName = itm.lastName;
         user.userName = itm.userName;
         user.password = itm.password;
+        user.role = itm.role;
         user.isActive = itm.isActive;
         users.push(user);
       });

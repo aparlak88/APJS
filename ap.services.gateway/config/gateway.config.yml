@@ -19,15 +19,15 @@ policies:
   - oauth2
   - proxy
   - rate-limit
+  - jwt
 pipelines:
   default:
     apiEndpoints:
       - userapi
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
       - jwt:
-        action:
+          - action:
+              secretOrPublicKey: "91249681-5226-4a78-84ee-acfe0d010719"
       - proxy:
           - action:
               serviceEndpoint: userservice 
